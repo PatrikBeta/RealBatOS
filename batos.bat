@@ -1,26 +1,29 @@
-echo off
-cls
+@echo off
 :updater
 title BatOS Updater
 echo Checking For Updates...
 timeout /nobreak 7 > nul
-if exist c:\windows\batsystem\outofdate.date timeout /nobreak 6 | echo Updating BatOS... & echo Updated
-if exist c:\windows\batsystem\outofdate.date pause
-if exist c:\windows\batsystem\outofdate.date cmdx.exe /c del /f /q c:\windows\batsystem\outofdate.date
-:os
+if exist %~dp0outofdate* timeout /nobreak 6 | echo Updating BatOS...
+if exist %~dp0outofdate* del /f /q %~dp0outofdate* & echo BatOS Updated
+if exist %~dp0outofdate* pause
+:osstartup
 cls
 title BatOS
 echo Starting BatOS...
-timeout /nobreak 5 > nul & cls
+timeout /nobreak 2 > nul
 :osmenu
 cls
-echo 1 = Exit
+echo 1 = Exit BatOS
 echo 2 = Browse For Files
-echo 3 = Launch CMD
-echo 4 = Change Settings
-c:\windows\system32\choice.exe /c 4321 > nul
-if errorlevel 4 (start c:\windows\system32\gpedit.msc)
-if errorlevel 3 (start c:\windows\system32\cmd.exe)
-if errorlevel 2 (start c:\windows\filemanager.bat)
+echo 3 = Change Settings
+echo 4 = Restart BatOS
+echo 5 = Run a Program
+echo 6 = Terminal
+choice /c 123456 > nul
+if errorlevel 6 (cls & title BatOS Terminal & cmd /d /c "chdir /d %SystemRoot%\System32 & cmd" & title BatOS & goto osmenu)
+if errorlevel 5 (call %~dp0batosrunner.bat & goto osmenu)
+if errorlevel 4 (start cmd /c %~dpnx0 & exit)
+if errorlevel 3 (start gpedit.msc & goto osmenu)
+if errorlevel 2 (start cmd /c filemanager.bat & goto osmenu)
 if errorlevel 1 (exit)
 goto osmenu
