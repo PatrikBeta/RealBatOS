@@ -1,4 +1,5 @@
 @echo off
+chdir /d %SystemRoot%\System32
 :updater
 title BatOS Updater
 echo Checking For Updates...
@@ -22,8 +23,8 @@ echo 6 = Terminal
 choice /c 123456 > nul
 if errorlevel 6 (cls & title BatOS Terminal & cmd /d /c "chdir /d %userprofile% & cmd" & title BatOS & goto osmenu)
 if errorlevel 5 (call %~dp0batosrunner.bat & goto osmenu)
-if errorlevel 4 (start cmd /c %~dpnx0 & exit)
+if errorlevel 4 (start cmd /c %~dpnx0 & exit /b)
 if errorlevel 3 (start gpedit.msc & goto osmenu)
 if errorlevel 2 (start explorer file: & goto osmenu)
-if errorlevel 1 (exit)
+if errorlevel 1 (exit /b)
 goto osmenu
